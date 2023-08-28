@@ -5,8 +5,6 @@
 package dbr
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
@@ -52,10 +50,7 @@ type PostContentFormated struct {
 }
 
 func (p *PostContent) DeleteByPostId(db *gorm.DB, postId int64) error {
-	return db.Model(p).Where("post_id = ?", postId).Updates(map[string]any{
-		"deleted_on": time.Now().Unix(),
-		"is_del":     1,
-	}).Error
+	return db.Model(p).Where("post_id = ?", postId).Delete(&p).Error
 }
 
 func (p *PostContent) MediaContentsByPostId(db *gorm.DB, postId int64) (contents []string, err error) {

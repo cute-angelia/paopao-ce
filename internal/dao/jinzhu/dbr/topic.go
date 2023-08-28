@@ -5,8 +5,6 @@
 package dbr
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
@@ -82,10 +80,7 @@ func (t *Tag) Update(db *gorm.DB) error {
 }
 
 func (t *Tag) Delete(db *gorm.DB) error {
-	return db.Model(t).Where("id = ?", t.Model.ID).Updates(map[string]any{
-		"deleted_on": time.Now().Unix(),
-		"is_del":     1,
-	}).Error
+	return db.Model(t).Where("id = ?", t.Model.ID).Delete(&t).Error
 }
 
 func (t *Tag) List(db *gorm.DB, conditions *ConditionsT, offset, limit int) (tags []*Tag, err error) {

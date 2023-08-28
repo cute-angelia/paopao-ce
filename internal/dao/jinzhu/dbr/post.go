@@ -5,10 +5,8 @@
 package dbr
 
 import (
-	"strings"
-	"time"
-
 	"gorm.io/gorm"
+	"strings"
 )
 
 // PostVisibleT 可访问类型，0公开，1私密，2好友
@@ -102,10 +100,11 @@ func (p *Post) Create(db *gorm.DB) (*Post, error) {
 }
 
 func (s *Post) Delete(db *gorm.DB) error {
-	return db.Model(s).Where("id = ?", s.Model.ID).Updates(map[string]any{
-		"deleted_on": time.Now().Unix(),
-		"is_del":     1,
-	}).Error
+	return db.Model(s).Where("id = ?", s.Model.ID).Delete(&s).Error
+	//return db.Model(s).Where("id = ?", s.Model.ID).Updates(map[string]any{
+	//	"deleted_on": time.Now().Unix(),
+	//	"is_del":     1,
+	//}).Error
 }
 
 func (p *Post) Get(db *gorm.DB) (*Post, error) {
