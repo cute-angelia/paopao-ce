@@ -5,8 +5,6 @@
 package dbr
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
@@ -56,8 +54,5 @@ func (c *CommentContent) MediaContentsByCommentId(db *gorm.DB, commentIds []int6
 }
 
 func (c *CommentContent) DeleteByCommentIds(db *gorm.DB, commentIds []int64) error {
-	return db.Model(c).Where("comment_id IN ?", commentIds).Updates(map[string]any{
-		"deleted_on": time.Now().Unix(),
-		"is_del":     1,
-	}).Error
+	return db.Model(c).Where("comment_id IN ?", commentIds).Delete(&c).Error
 }
