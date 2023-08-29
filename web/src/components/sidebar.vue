@@ -96,6 +96,8 @@ watch(store.state, () => {
                     console.log(err);
                 });
 
+msgLoop.value =1;
+	/*
             msgLoop.value = setInterval(() => {
                 getUnreadMsgCount()
                     .then((res) => {
@@ -105,6 +107,7 @@ watch(store.state, () => {
                         console.log(err);
                     });
             }, defMsgLoopInterval);
+            */
         }
     } else {
         if (msgLoop.value) {

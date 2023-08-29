@@ -66,6 +66,7 @@ func newGormDB() (*gorm.DB, error) {
 		logrus.Debugln("use MySQL as db")
 		if db, err = gorm.Open(mysql.Open(MysqlSetting.Dsn()), config); err == nil {
 			db.Use(plugin)
+			db = db.Debug()
 		}
 	} else if cfg.If("Postgres") {
 		logrus.Debugln("use PostgreSQL as db")

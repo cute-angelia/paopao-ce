@@ -83,12 +83,13 @@ func (s *coreSrv) GetUserInfo(req *web.UserInfoReq) (*web.UserInfoResp, mir.Erro
 }
 
 func (s *coreSrv) GetUnreadMsgCount(req *web.GetUnreadMsgCountReq) (*web.GetUnreadMsgCountResp, mir.Error) {
-	count, err := s.Ds.GetUnreadCount(req.Uid)
-	if err != nil {
-		return nil, xerror.ServerError
-	}
+	// 关闭 message
+	//count, err := s.Ds.GetUnreadCount(req.Uid)
+	//if err != nil {
+	//	return nil, xerror.ServerError
+	//}
 	return &web.GetUnreadMsgCountResp{
-		Count: count,
+		Count: 0,
 	}, nil
 }
 
