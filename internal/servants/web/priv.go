@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/alimy/mir/v4"
+	"github.com/cute-angelia/go-utils/syntax/ifile"
 	"github.com/disintegration/imaging"
 	"github.com/gin-gonic/gin"
-	"github.com/gofrs/uuid/v5"
 	api "github.com/rocboss/paopao-ce/auto/api/v1"
 	"github.com/rocboss/paopao-ce/internal/conf"
 	"github.com/rocboss/paopao-ce/internal/core"
@@ -117,8 +117,8 @@ func (s *privSrv) UploadAttachment(req *web.UploadAttachmentReq) (*web.UploadAtt
 	defer req.File.Close()
 
 	// 生成随机路径
-	randomPath := uuid.Must(uuid.NewV4()).String()
-	ossSavePath := req.UploadType + "/" + generatePath(randomPath[:8]) + "/" + randomPath[9:] + req.FileExt
+	//randomPath := uuid.Must(uuid.NewV4()).String()
+	ossSavePath := req.UploadType + "/" + time.Now().Format("2006") + "/" + ifile.NewFileName("").SetExt(req.FileExt).GetNameTimelineReverse(true)
 	objectUrl, err := s.oss.PutObject(ossSavePath, req.File, req.FileSize, req.ContentType, false)
 	if err != nil {
 		logrus.Errorf("oss.putObject err: %s", err)
