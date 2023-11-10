@@ -27,6 +27,9 @@ type Priv struct {
 	// CreateTweet 发布动态
 	CreateTweet func(Post, web.CreateTweetReq) web.CreateTweetResp `mir:"/post"`
 
+	// 更新内容
+	UpdateTweetContent func(Post, web.UpdateTweetContentReq) web.UpdateTweetContentResp `mir:"/post/updateContent"`
+
 	// DeleteTweet 删除动态
 	DeleteTweet func(Delete, web.DeleteTweetReq) `mir:"/post"`
 

@@ -77,14 +77,23 @@ type LockTweetReq struct {
 	ID       int64 `json:"id" binding:"required"`
 }
 
-type EditTweetTextReq struct {
+type UpdateTweetContentReq struct {
 	BaseInfo `json:"-" binding:"-"`
-	PostID   int64  `json:"post_id" binding:"required"`
-	ID       int64  `json:"id" binding:"required"`
-	Content  string `json:"content" binding:"required"`
+	ID       int64           `json:"id" binding:"required"`
+	PostID   int64           `json:"post_id" binding:"required"`
+	UserID   int64           `json:"user_id"`
+	Content  string          `json:"content" binding:"required"`
+	Type     ms.PostContentT `json:"type"`
+	Sort     int64           `json:"sort"`
 }
 
-type EditTweetTextResp struct {
+type UpdateTweetContentResp struct {
+	ID      int64           `json:"id" binding:"required"`
+	PostID  int64           `json:"post_id" binding:"required"`
+	UserID  int64           `json:"user_id"`
+	Content string          `json:"content" binding:"required"`
+	Type    ms.PostContentT `json:"type"`
+	Sort    int64           `json:"sort"`
 }
 
 type LockTweetResp struct {

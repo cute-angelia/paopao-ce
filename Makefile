@@ -39,6 +39,9 @@ build-web:
 	@cd web && rm -rf dist/* && yarn build && cd -
 
 run:
+	@go run main.go serve
+
+run2:
 	@go run -pgo=auto -trimpath -gcflags "all=-N -l" -tags '$(TAGS)' -ldflags '$(LDFLAGS)' . serve
 
 .PHONY: release

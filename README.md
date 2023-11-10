@@ -17,5 +17,10 @@
 2. 启动 api
    go run main.go serve
 
+web icon https://ionic.io/ionicons
 
-icon https://ionic.io/ionicons
+增加一个路由
+
+1. 业务处理 /internal/servants/web/priv.go
+2. 编辑 mirc/web/v1/priv.go
+3. 自动生成 gen-mir

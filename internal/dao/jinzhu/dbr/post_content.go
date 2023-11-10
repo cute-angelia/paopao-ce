@@ -64,6 +64,11 @@ func (p *PostContent) Create(db *gorm.DB) (*PostContent, error) {
 	return p, err
 }
 
+func (p *PostContent) Update(db *gorm.DB) (*PostContent, error) {
+	err := db.Debug().Model(&PostContent{}).Where("id = ?", p.ID).Updates(&p).Error
+	return p, err
+}
+
 func (p *PostContent) Format() *PostContentFormated {
 	if p.Model == nil {
 		return nil

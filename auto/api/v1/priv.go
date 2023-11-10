@@ -33,10 +33,10 @@ type Priv interface {
 	HighlightTweet(*web.HighlightTweetReq) (*web.HighlightTweetResp, mir.Error)
 	StickTweet(*web.StickTweetReq) (*web.StickTweetResp, mir.Error)
 	LockTweet(*web.LockTweetReq) (*web.LockTweetResp, mir.Error)
-
 	CollectionTweet(*web.CollectionTweetReq) (*web.CollectionTweetResp, mir.Error)
 	StarTweet(*web.StarTweetReq) (*web.StarTweetResp, mir.Error)
 	DeleteTweet(*web.DeleteTweetReq) mir.Error
+	UpdateTweetContent(*web.UpdateTweetContentReq) (*web.UpdateTweetContentResp, mir.Error)
 	CreateTweet(*web.CreateTweetReq) (*web.CreateTweetResp, mir.Error)
 	DownloadAttachment(*web.DownloadAttachmentReq) (*web.DownloadAttachmentResp, mir.Error)
 	DownloadAttachmentPrecheck(*web.DownloadAttachmentPrecheckReq) (*web.DownloadAttachmentPrecheckResp, mir.Error)
@@ -257,8 +257,6 @@ func RegisterPrivServant(e *gin.Engine, s Priv) {
 		resp, err := s.LockTweet(req)
 		s.Render(c, resp, err)
 	})
-
-
 	router.Handle("POST", "/post/collection", func(c *gin.Context) {
 		select {
 		case <-c.Request.Context().Done():
@@ -299,6 +297,20 @@ func RegisterPrivServant(e *gin.Engine, s Priv) {
 			return
 		}
 		s.Render(c, nil, s.DeleteTweet(req))
+	})
+	router.Handle("POST", "/post/updateContent", func(c *gin.Context) {
+		select {
+		case <-c.Request.Context().Done():
+			return
+		default:
+		}
+		req := new(web.UpdateTweetContentReq)
+		if err := s.Bind(c, req); err != nil {
+			s.Render(c, nil, err)
+			return
+		}
+		resp, err := s.UpdateTweetContent(req)
+		s.Render(c, resp, err)
 	})
 	router.Handle("POST", "/post", func(c *gin.Context) {
 		select {
@@ -439,6 +451,10 @@ func (UnimplementedPrivServant) StarTweet(req *web.StarTweetReq) (*web.StarTweet
 
 func (UnimplementedPrivServant) DeleteTweet(req *web.DeleteTweetReq) mir.Error {
 	return mir.Errorln(http.StatusNotImplemented, http.StatusText(http.StatusNotImplemented))
+}
+
+func (UnimplementedPrivServant) UpdateTweetContent(req *web.UpdateTweetContentReq) (*web.UpdateTweetContentResp, mir.Error) {
+	return nil, mir.Errorln(http.StatusNotImplemented, http.StatusText(http.StatusNotImplemented))
 }
 
 func (UnimplementedPrivServant) CreateTweet(req *web.CreateTweetReq) (*web.CreateTweetResp, mir.Error) {

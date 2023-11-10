@@ -197,6 +197,10 @@ func (s *tweetManageSrv) CreatePostContent(content *ms.PostContent) (*ms.PostCon
 	return content.Create(s.db)
 }
 
+func (s *tweetManageSrv) UpdatePostContent(content *ms.PostContent) (*ms.PostContent, error) {
+	return content.Update(s.db)
+}
+
 func (s *tweetManageSrv) CreateAttachment(obj *ms.Attachment) (int64, error) {
 	attachment, err := obj.Create(s.db)
 	return attachment.ID, err
@@ -294,12 +298,6 @@ func (s *tweetManageSrv) deleteCommentByPostId(db *gorm.DB, postId int64) ([]str
 }
 
 func (s *tweetManageSrv) LockPost(post *ms.Post) error {
-	post.IsLock = 1 - post.IsLock
-	return post.Update(s.db)
-}
-
-func (s *tweetManageSrv) EditContentText(postContent *ms.PostContentFormated) error {
-	postContent.Content =
 	post.IsLock = 1 - post.IsLock
 	return post.Update(s.db)
 }

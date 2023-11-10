@@ -127,7 +127,7 @@ export const editPostText = (
 ): Promise<NetReq.PostDeletePost> => {
   return request({
     method: "post",
-    url: "/v1/post/editPostText",
+    url: "/v1/post/updateContent",
     data,
   });
 };

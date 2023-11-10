@@ -38,23 +38,20 @@
           </n-dropdown>
         </div>
 
-        
-        <!-- 编辑 -->
-        <n-modal v-model:show="showEditModal" :mask-closable="false" class="custom-card" style="width:600px;" preset="card" title="修改"    
-          positive-text="确认" negative-text="取消" @positive-click="execDelAction" >
+
+        <!-- 编辑content -->
+        <n-modal v-model:show="showEditModal" :mask-closable="false" class="custom-card" style="width:600px;"
+          preset="card" title="修改" positive-text="确认" negative-text="取消" @positive-click="execDelAction">
           <template #header-extra>
-        </template>
-        <n-input
-        type="textarea"
-        v-model:value="postContentText.content"
-      />
-        <template #footer>
-          <n-button @click="execEditAction" type="primary" style="float:right;">
-        保存
-      </n-button>
-        </template>
+          </template>
+          <n-input type="textarea" v-model:value="postContentText.content" />
+          <template #footer>
+            <n-button @click="execEditAction" type="primary" style="float:right;">
+              保存
+            </n-button>
+          </template>
         </n-modal>
-     
+
         <!-- 删除确认 -->
         <n-modal v-model:show="showDelModal" :mask-closable="false" preset="dialog" title="提示" content="确定删除该泡泡动态吗？"
           positive-text="确认" negative-text="取消" @positive-click="execDelAction" />
@@ -204,6 +201,10 @@ const tempVisibility = ref<VisibilityEnum>(VisibilityEnum.PUBLIC);
 // cyw 内容编辑
 const postContentText = ref({
   id: 0,
+  post_id: 0,
+  user_id: 0,
+  type: 0,
+  sort: 0,
   content: ""
 })
 
@@ -226,15 +227,19 @@ const post = computed({
     );
 
 
-for (let i = 0; i < post.contents.length; i++) {
-  const element = post.contents[i];
-   if (element.type === 2) {
+    for (let i = 0; i < post.contents.length; i++) {
+      const element = post.contents[i];
+      if (element.type === 2) {
         postContentText.value = {
           id: element.id,
-          content: element.content
+          content: element.content,
+          post_id: element.post_id,
+          user_id: post.user_id || 0,
+          type: element.type,
+          sort: element.sort
         }
       }
-}
+    }
 
     post.contents.map((content) => {
       if (+content.type === 1 || +content.type === 2) {
@@ -440,13 +445,10 @@ const handlePostAction = (
 
 // 编辑
 const execEditAction = () => {
-  editPostText({
-    post_id: post.value.id,
-    id: postContentText.value.id,
-    content: postContentText.value.content,
-  })
+  editPostText(postContentText.value)
     .then((_res) => {
       window.$message.success('修改成功');
+      showEditModal.value = false;
       setTimeout(() => {
         store.commit('refresh');
       }, 50);
@@ -455,6 +457,8 @@ const execEditAction = () => {
       loading.value = false;
     });
 };
+
+// 删除
 const execDelAction = () => {
   deletePost({
     id: post.value.id,
@@ -606,7 +610,7 @@ onMounted(() => {
         console.log(err);
       });
 
-      console.log(post.value)
+    console.log(post.value)
   }
 });
 </script>

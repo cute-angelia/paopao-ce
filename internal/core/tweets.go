@@ -33,7 +33,6 @@ type TweetManageService interface {
 	CreatePost(post *ms.Post) (*ms.Post, error)
 	DeletePost(post *ms.Post) ([]string, error)
 	LockPost(post *ms.Post) error
-	EditContentText(post *ms.PostContentFormated) error
 	StickPost(post *ms.Post) error
 	HighlightPost(userId, postId int64) (int, error)
 	VisiblePost(post *ms.Post, visibility PostVisibleT) error
@@ -43,6 +42,7 @@ type TweetManageService interface {
 	CreatePostCollection(postID, userID int64) (*ms.PostCollection, error)
 	DeletePostCollection(p *ms.PostCollection) error
 	CreatePostContent(content *ms.PostContent) (*ms.PostContent, error)
+	UpdatePostContent(content *ms.PostContent) (*ms.PostContent, error)
 	CreateAttachment(obj *ms.Attachment) (int64, error)
 }
 

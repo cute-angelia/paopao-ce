@@ -48,6 +48,7 @@ var (
 	ErrVisblePostFailed        = xerror.NewError(30012, "更新可见性失败")
 	ErrHighlightPostFailed     = xerror.NewError(30013, "动态设为亮点失败")
 	ErrGetPostContentFailed    = xerror.NewError(30014, "获取内容失败")
+	ErrUpdatePostContentFailed = xerror.NewError(30015, "更新内容失败")
 
 	ErrGetCommentsFailed   = xerror.NewError(40001, "获取评论列表失败")
 	ErrCreateCommentFailed = xerror.NewError(40002, "评论发布失败")

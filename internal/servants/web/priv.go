@@ -6,6 +6,7 @@ package web
 
 import (
 	"image"
+	"log"
 	"strings"
 	"time"
 
@@ -666,8 +667,8 @@ func (s *privSrv) LockTweet(req *web.LockTweetReq) (*web.LockTweetResp, mir.Erro
 	}, nil
 }
 
-// EditTweetText 修改文本内容
-func (s *privSrv) EditTweetText(req *web.EditTweetTextReq) (*web.EditTweetTextResp, mir.Error) {
+// UpdateTweetContent 修改内容
+func (s *privSrv) UpdateTweetContent(req *web.UpdateTweetContentReq) (*web.UpdateTweetContentResp, mir.Error) {
 	post, err := s.Ds.GetPostByID(req.PostID)
 	if err != nil {
 		return nil, web.ErrGetPostsFailed
@@ -682,12 +683,23 @@ func (s *privSrv) EditTweetText(req *web.EditTweetTextReq) (*web.EditTweetTextRe
 		return nil, web.ErrGetPostContentFailed
 	}
 
-	newStatus := 1 - post.IsLock
-	if err := s.Ds.LockPost(post); err != nil {
-		return nil, web.ErrLockPostFailed
-	}
+	// 修改内容
+	postContent.Content = req.Content
+	postContent.Sort = req.Sort
 
-	return &web.EditTweetTextResp{}, nil
+	if resp, err := s.Ds.UpdatePostContent(postContent); err != nil {
+		log.Println(err)
+		return nil, web.ErrUpdatePostContentFailed
+	} else {
+		return &web.UpdateTweetContentResp{
+			ID:      resp.ID,
+			PostID:  resp.PostID,
+			UserID:  resp.UserID,
+			Content: resp.Content,
+			Type:    resp.Type,
+			Sort:    resp.Sort,
+		}, nil
+	}
 }
 
 func (s *privSrv) deletePostCommentReply(reply *ms.CommentReply) error {
