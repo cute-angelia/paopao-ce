@@ -121,6 +121,17 @@ export const deletePost = (
   });
 };
 
+/** 编辑动态文本 */
+export const editPostText = (
+  data: NetParams.PostEditTextPost
+): Promise<NetReq.PostDeletePost> => {
+  return request({
+    method: "post",
+    url: "/v1/post/editPostText",
+    data,
+  });
+};
+
 /** 锁定/解锁动态 */
 export const lockPost = (
   data: NetParams.PostLockPost

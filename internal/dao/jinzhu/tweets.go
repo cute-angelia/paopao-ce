@@ -298,6 +298,12 @@ func (s *tweetManageSrv) LockPost(post *ms.Post) error {
 	return post.Update(s.db)
 }
 
+func (s *tweetManageSrv) EditContentText(postContent *ms.PostContentFormated) error {
+	postContent.Content =
+	post.IsLock = 1 - post.IsLock
+	return post.Update(s.db)
+}
+
 func (s *tweetManageSrv) StickPost(post *ms.Post) error {
 	post.IsTop = 1 - post.IsTop
 	if err := post.Update(s.db); err != nil {

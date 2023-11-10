@@ -666,6 +666,30 @@ func (s *privSrv) LockTweet(req *web.LockTweetReq) (*web.LockTweetResp, mir.Erro
 	}, nil
 }
 
+// EditTweetText 修改文本内容
+func (s *privSrv) EditTweetText(req *web.EditTweetTextReq) (*web.EditTweetTextResp, mir.Error) {
+	post, err := s.Ds.GetPostByID(req.PostID)
+	if err != nil {
+		return nil, web.ErrGetPostsFailed
+	}
+	if post.UserID != req.User.ID && !req.User.IsAdmin {
+		return nil, web.ErrNoPermission
+	}
+
+	// todo
+	postContent, err := s.Ds.GetPostContentByID(req.ID)
+	if err != nil {
+		return nil, web.ErrGetPostContentFailed
+	}
+
+	newStatus := 1 - post.IsLock
+	if err := s.Ds.LockPost(post); err != nil {
+		return nil, web.ErrLockPostFailed
+	}
+
+	return &web.EditTweetTextResp{}, nil
+}
+
 func (s *privSrv) deletePostCommentReply(reply *ms.CommentReply) error {
 	err := s.Ds.DeleteCommentReply(reply)
 	if err != nil {

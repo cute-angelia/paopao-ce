@@ -77,6 +77,16 @@ type LockTweetReq struct {
 	ID       int64 `json:"id" binding:"required"`
 }
 
+type EditTweetTextReq struct {
+	BaseInfo `json:"-" binding:"-"`
+	PostID   int64  `json:"post_id" binding:"required"`
+	ID       int64  `json:"id" binding:"required"`
+	Content  string `json:"content" binding:"required"`
+}
+
+type EditTweetTextResp struct {
+}
+
 type LockTweetResp struct {
 	LockStatus int `json:"lock_status"`
 }

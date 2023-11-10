@@ -12,7 +12,7 @@ declare module NetReq {
 
   type AuthUserInfo = Item.UserInfo;
 
-  interface AuthUpdateUserPassword {}
+  interface AuthUpdateUserPassword { }
 
   interface UserGetCollections {
     /** 帖子列表 */
@@ -72,7 +72,7 @@ declare module NetReq {
     status: string;
   }
 
-  interface UserBindUserPhone {}
+  interface UserBindUserPhone { }
 
   interface UserGetCaptcha {
     id: string;
@@ -80,23 +80,23 @@ declare module NetReq {
     b64s: string;
   }
 
-  interface UserChangeNickname {}
+  interface UserChangeNickname { }
 
-  interface UserChangePassword {}
+  interface UserChangePassword { }
 
-  interface UserChangeStatus {}
+  interface UserChangeStatus { }
 
-  interface FollowUserResp {}
+  interface FollowUserResp { }
 
-  interface UnfollowUserResp {}
+  interface UnfollowUserResp { }
 
-  interface AddFriend {}
+  interface AddFriend { }
 
-  interface DeleteFriend {}
+  interface DeleteFriend { }
 
-  interface RejectFriend {}
+  interface RejectFriend { }
 
-  interface RequestingFriend {}
+  interface RequestingFriend { }
 
   type PostGetPost = Item.PostProps;
 
@@ -157,19 +157,21 @@ declare module NetReq {
 
   type PostCreatePost = Item.PostProps;
 
-  interface PostDeletePost {}
+  interface PostEditTextPost { }
 
-  interface PostTweetCommentThumbs {}
+  interface PostDeletePost { }
 
-  interface PostTweetReplyThumbs {}
+  interface PostTweetCommentThumbs { }
+
+  interface PostTweetReplyThumbs { }
 
   type PostCreateComment = Item.CommentProps;
 
-  interface PostDeleteComment {}
+  interface PostDeleteComment { }
 
   type PostCreateCommentReply = Item.ReplyProps;
 
-  interface PostDeleteCommentReply {}
+  interface PostDeleteCommentReply { }
 
   interface GetContacts {
     /** 评论列表 */
@@ -183,7 +185,7 @@ declare module NetReq {
     top_status: 0 | 1;
   }
 
-  interface PostFollowTopic {}
+  interface PostFollowTopic { }
 
-  interface PostUnfollowTopic {}
+  interface PostUnfollowTopic { }
 }

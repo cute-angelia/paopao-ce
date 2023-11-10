@@ -33,6 +33,7 @@ type Priv interface {
 	HighlightTweet(*web.HighlightTweetReq) (*web.HighlightTweetResp, mir.Error)
 	StickTweet(*web.StickTweetReq) (*web.StickTweetResp, mir.Error)
 	LockTweet(*web.LockTweetReq) (*web.LockTweetResp, mir.Error)
+
 	CollectionTweet(*web.CollectionTweetReq) (*web.CollectionTweetResp, mir.Error)
 	StarTweet(*web.StarTweetReq) (*web.StarTweetResp, mir.Error)
 	DeleteTweet(*web.DeleteTweetReq) mir.Error
@@ -256,6 +257,8 @@ func RegisterPrivServant(e *gin.Engine, s Priv) {
 		resp, err := s.LockTweet(req)
 		s.Render(c, resp, err)
 	})
+
+
 	router.Handle("POST", "/post/collection", func(c *gin.Context) {
 		select {
 		case <-c.Request.Context().Done():

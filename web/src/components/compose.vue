@@ -48,11 +48,6 @@
                     <div class="attachment">
                         <n-upload-trigger #="{ handleClick }" abstract>
                             <n-button
-                                :disabled="
-                                    (fileQueue.length > 0 &&
-                                        uploadType === 'public/video') ||
-                                    fileQueue.length === 9
-                                "
                                 @click="
                                     () => {
                                         setUploadType('public/image');
@@ -78,11 +73,6 @@
                           v-if="allowTweetVideo"
                           #="{ handleClick }" abstract>
                             <n-button
-                                :disabled="
-                                    (fileQueue.length > 0 &&
-                                        uploadType !== 'public/video') ||
-                                    fileQueue.length === 9
-                                "
                                 @click="
                                     () => {
                                         setUploadType('public/video');
@@ -108,11 +98,6 @@
                           v-if="allowTweetAttachment"
                           #="{ handleClick }" abstract>
                             <n-button
-                                :disabled="
-                                    (fileQueue.length > 0 &&
-                                        uploadType === 'public/video') ||
-                                    fileQueue.length === 9
-                                "
                                 @click="
                                     () => {
                                         setUploadType('attachment');
@@ -435,8 +420,8 @@ const beforeUpload = async (data: any) => {
         return false;
     }
 
-    if (uploadType.value === 'image' && data.file.file?.size > 10485760) {
-        window.$message.warning('图片大小不能超过10MB');
+    if (uploadType.value === 'image' && data.file.file?.size > 30485760) {
+        window.$message.warning('图片大小不能超过300MB');
         return false;
     }
 
@@ -451,9 +436,9 @@ const beforeUpload = async (data: any) => {
 
     if (
         uploadType.value === 'public/video' &&
-        data.file.file?.size > 104857600
+        data.file.file?.size > 104857600000
     ) {
-        window.$message.warning('视频大小不能超过100MB');
+        window.$message.warning('视频大小不能超过100G');
         return false;
     }
     // 附件类型校验
@@ -464,8 +449,8 @@ const beforeUpload = async (data: any) => {
         return false;
     }
 
-    if (uploadType.value === 'attachment' && data.file.file?.size > 104857600) {
-        window.$message.warning('附件大小不能超过100MB');
+    if (uploadType.value === 'attachment' && data.file.file?.size > 104857600000) {
+        window.$message.warning('附件大小不能超过100000MB');
         return false;
     }
 

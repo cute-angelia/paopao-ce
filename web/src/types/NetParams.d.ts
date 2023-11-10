@@ -35,7 +35,7 @@ declare module NetParams {
     id: number;
   }
 
-  interface UserGetUnreadMsgCount {}
+  interface UserGetUnreadMsgCount { }
 
   interface UserGetMessages {
     page: number;
@@ -90,7 +90,7 @@ declare module NetParams {
     imgCaptcha: string;
   }
 
-  interface UserGetCaptcha {}
+  interface UserGetCaptcha { }
 
   interface UserWhisper {
     user_id: number;
@@ -201,7 +201,7 @@ declare module NetParams {
     page_size?: number;
   }
 
-  interface GetContacts {}
+  interface GetContacts { }
 
   interface PostCreatePost {
     /** 帖子内容列表 */
@@ -214,6 +214,13 @@ declare module NetParams {
     attachment_price: number;
     /** 可见性：0为公开，1为私密，2为好友可见 */
     visibility: import("@/utils/IEnum").VisibilityEnum;
+  }
+
+
+  interface PostEditTextPost {
+    post_id: number;
+    id: number;
+    content: string;
   }
 
   interface PostDeletePost {

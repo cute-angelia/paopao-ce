@@ -38,9 +38,27 @@
           </n-dropdown>
         </div>
 
+        
+        <!-- 编辑 -->
+        <n-modal v-model:show="showEditModal" :mask-closable="false" class="custom-card" style="width:600px;" preset="card" title="修改"    
+          positive-text="确认" negative-text="取消" @positive-click="execDelAction" >
+          <template #header-extra>
+        </template>
+        <n-input
+        type="textarea"
+        v-model:value="postContentText.content"
+      />
+        <template #footer>
+          <n-button @click="execEditAction" type="primary" style="float:right;">
+        保存
+      </n-button>
+        </template>
+        </n-modal>
+     
         <!-- 删除确认 -->
         <n-modal v-model:show="showDelModal" :mask-closable="false" preset="dialog" title="提示" content="确定删除该泡泡动态吗？"
           positive-text="确认" negative-text="取消" @positive-click="execDelAction" />
+
         <!-- 锁定确认 -->
         <n-modal v-model:show="showLockModal" :mask-closable="false" preset="dialog" title="提示" :content="'确定' +
           (post.is_lock ? '解锁' : '锁定') +
@@ -140,6 +158,7 @@ import {
   PushOutline,
   TrashOutline,
   LockClosedOutline,
+  CreateOutline,
   LockOpenOutline,
   EyeOutline,
   EyeOffOutline,
@@ -152,6 +171,7 @@ import {
   postStar,
   getPostCollection,
   postCollection,
+  editPostText,
   deletePost,
   lockPost,
   stickPost,
@@ -172,6 +192,7 @@ const props = withDefaults(
   }>(),
   {}
 );
+const showEditModal = ref(false);
 const showDelModal = ref(false);
 const showLockModal = ref(false);
 const showStickModal = ref(false);
@@ -179,6 +200,12 @@ const showHighlightModal = ref(false);
 const showVisibilityModal = ref(false);
 const loading = ref(false);
 const tempVisibility = ref<VisibilityEnum>(VisibilityEnum.PUBLIC);
+
+// cyw 内容编辑
+const postContentText = ref({
+  id: 0,
+  content: ""
+})
 
 const emit = defineEmits<{
   (e: 'reload'): void;
@@ -197,6 +224,18 @@ const post = computed({
       },
       props.post
     );
+
+
+for (let i = 0; i < post.contents.length; i++) {
+  const element = post.contents[i];
+   if (element.type === 2) {
+        postContentText.value = {
+          id: element.id,
+          content: element.content
+        }
+      }
+}
+
     post.contents.map((content) => {
       if (+content.type === 1 || +content.type === 2) {
         post.texts.push(content);
@@ -243,6 +282,14 @@ const adminOptions = computed(() => {
       icon: renderIcon(TrashOutline)
     },
   ];
+
+  // 编辑
+  options.push({
+    label: '编辑',
+    key: 'edit',
+    icon: renderIcon(CreateOutline)
+  });
+
   if (post.value.is_lock === 0) {
     options.push({
       label: '锁定',
@@ -353,9 +400,12 @@ const doClickText = (e: MouseEvent, id: number) => {
   goPostDetail(id);
 };
 const handlePostAction = (
-  item: 'delete' | 'lock' | 'unlock' | 'stick' | 'unstick' | 'highlight' | 'unhighlight' | 'vpublic' | 'vprivate' | 'vfriend'
+  item: 'delete' | 'lock' | 'unlock' | 'stick' | 'unstick' | 'highlight' | 'unhighlight' | 'vpublic' | 'vprivate' | 'vfriend' | 'edit'
 ) => {
   switch (item) {
+    case 'edit':
+      showEditModal.value = true;
+      break;
     case 'delete':
       showDelModal.value = true;
       break;
@@ -388,6 +438,23 @@ const handlePostAction = (
   }
 };
 
+// 编辑
+const execEditAction = () => {
+  editPostText({
+    post_id: post.value.id,
+    id: postContentText.value.id,
+    content: postContentText.value.content,
+  })
+    .then((_res) => {
+      window.$message.success('修改成功');
+      setTimeout(() => {
+        store.commit('refresh');
+      }, 50);
+    })
+    .catch((_err) => {
+      loading.value = false;
+    });
+};
 const execDelAction = () => {
   deletePost({
     id: post.value.id,
@@ -538,6 +605,8 @@ onMounted(() => {
       .catch((err) => {
         console.log(err);
       });
+
+      console.log(post.value)
   }
 });
 </script>
