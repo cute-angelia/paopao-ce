@@ -53,6 +53,19 @@
           </div>
         </div>
 
+        <!-- 编辑content -->
+        <n-modal v-model:show="showEditModal" :mask-closable="false" class="custom-card" style="width:600px;"
+          preset="card" title="修改" positive-text="确认" negative-text="取消" @positive-click="execEditAction">
+          <template #header-extra>
+          </template>
+          <n-input type="textarea" v-model:value="postContentText.content" />
+          <template #footer>
+            <n-button @click="execEditAction" type="primary" style="float:right;">
+              保存
+            </n-button>
+          </template>
+        </n-modal>
+
         <!-- 删除确认 -->
         <n-modal v-model:show="showDelModal" :mask-closable="false" preset="dialog" title="提示" content="确定删除该泡泡动态吗？"
           positive-text="确认" negative-text="取消" @positive-click="execDelAction" />
@@ -134,6 +147,7 @@ import {
   TrashOutline,
   LockClosedOutline,
   LockOpenOutline,
+  CreateOutline,
   EyeOutline,
   EyeOffOutline,
   PersonOutline,
@@ -150,6 +164,7 @@ import {
   postStar,
   getPostCollection,
   postCollection,
+  editPostText,
   deletePost,
   lockPost,
   stickPost,
@@ -158,6 +173,7 @@ import {
 } from '@/api/post';
 
 
+const showEditModal = ref(false);
 const showDelModal = ref(false);
 const showLockModal = ref(false);
 const showStickModal = ref(false);
@@ -186,6 +202,16 @@ const renderIcon = (icon: Component) => {
   }
 };
 
+// cyw 内容编辑
+const postContentText = ref({
+  id: 0,
+  post_id: 0,
+  user_id: 0,
+  type: 0,
+  sort: 0,
+  content: ""
+})
+
 const adminOptions = computed(() => {
   let options: DropdownOption[] = [
     {
@@ -194,6 +220,14 @@ const adminOptions = computed(() => {
       icon: renderIcon(TrashOutline)
     },
   ];
+
+  // 编辑
+  options.push({
+    label: '编辑',
+    key: 'edit',
+    icon: renderIcon(CreateOutline)
+  });
+
   if (post.value.is_lock === 0) {
     options.push({
       label: '锁定',
@@ -270,9 +304,28 @@ const adminOptions = computed(() => {
 });
 
 const handlePostAction = (
-  item: 'delete' | 'lock' | 'unlock' | 'stick' | 'unstick' | 'highlight' | 'unhighlight' | 'vpublic' | 'vprivate' | 'vfriend'
+  item: 'delete' | 'lock' | 'unlock' | 'stick' | 'unstick' | 'highlight' | 'unhighlight' | 'vpublic' | 'vprivate' | 'vfriend' | 'edit'
 ) => {
   switch (item) {
+    case 'edit':
+      for (let i = 0; i < post.value.contents.length; i++) {
+        const element = post.value.contents[i];
+        if (element.type === 2) {
+          postContentText.value = {
+            id: element.id,
+            content: element.content,
+            post_id: element.post_id,
+            user_id: post.value.user_id || 0,
+            type: element.type,
+            sort: element.sort
+          }
+        }
+      }
+
+      // console.log(postContentText);
+
+      showEditModal.value = true;
+      break;
     case 'delete':
       showDelModal.value = true;
       break;
@@ -340,7 +393,17 @@ const post = computed(() => {
   return post;
 });
 
-
+// 编辑
+const execEditAction = () => {
+  editPostText(postContentText.value)
+    .then((_res) => {
+      window.$message.success('修改成功');
+      showEditModal.value = false;
+    })
+    .catch((_err) => {
+      loading.value = false;
+    });
+};
 
 const execDelAction = () => {
   deletePost({

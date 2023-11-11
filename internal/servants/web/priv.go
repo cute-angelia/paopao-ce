@@ -677,7 +677,6 @@ func (s *privSrv) UpdateTweetContent(req *web.UpdateTweetContentReq) (*web.Updat
 		return nil, web.ErrNoPermission
 	}
 
-	// todo
 	postContent, err := s.Ds.GetPostContentByID(req.ID)
 	if err != nil {
 		return nil, web.ErrGetPostContentFailed

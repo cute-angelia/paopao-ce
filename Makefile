@@ -1,4 +1,4 @@
-.PHONY: all build build-web run test clean fmt pre-commit help
+.PHONY: all build build-web run test clean fmt pre-commit help infoenv
 
 PROJECT = paopao-ce
 TARGET = paopao
@@ -28,6 +28,16 @@ LDFLAGS = -X "${MOD_NAME}/pkg/version.version=${BUILD_VERSION}" \
           -X "${MOD_NAME}/pkg/version.buildDate=${BUILD_DATE}" \
           -X "${MOD_NAME}/pkg/version.commitID=${SHA_SHORT}" -w -s
 
+
+## env
+ENV_FILE := "web/.env"
+ENV_KEY := VITE_HOST
+ENV_VALUE := $(shell sed -n 's/^$(ENV_KEY)=//p' $(ENV_FILE))
+# ENV_VALUE :=
+
+infoenv:
+	@echo $(ENV_VALUE)
+
 all: fmt build
 
 build:
@@ -36,7 +46,10 @@ build:
 	@go build -pgo=auto -trimpath -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o $(RELEASE_ROOT)/$(TARGET)
 
 build-web:
-	@cd web && rm -rf dist/* && yarn build && cd -
+	@echo $(ENV_VALUE)
+	# @sed -i 's/^\($(ENV_KEY)\).*/\1=$(ENV_VALUE)/' $(ENV_FILE)
+	# @cd web && rm -rf dist/* && yarn build && cd -
+	@cd web && pnpm run build && cd -
 
 run:
 	@go run main.go serve

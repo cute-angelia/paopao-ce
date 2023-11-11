@@ -178,7 +178,7 @@ const props = withDefaults(defineProps<{
   imgs: () => []
 });
 
-console.log("props", props);
+// console.log("props", props);
 
 </script>
 

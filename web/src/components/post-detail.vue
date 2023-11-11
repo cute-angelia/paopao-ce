@@ -41,7 +41,7 @@
 
         <!-- 编辑content -->
         <n-modal v-model:show="showEditModal" :mask-closable="false" class="custom-card" style="width:600px;"
-          preset="card" title="修改" positive-text="确认" negative-text="取消" @positive-click="execDelAction">
+          preset="card" title="修改" positive-text="确认" negative-text="取消" @positive-click="execEditAction">
           <template #header-extra>
           </template>
           <n-input type="textarea" v-model:value="postContentText.content" />
