@@ -144,8 +144,8 @@ func fileCheck(uploadType string, size int64) mir.Error {
 		uploadType != "attachment" {
 		return xerror.InvalidParams
 	}
-	if size > 1024*1024*100 {
-		return web.ErrFileInvalidSize.WithDetails("最大允许100MB")
+	if size > 1024*1024*1024*20 {
+		return web.ErrFileInvalidSize.WithDetails("最大允许20G")
 	}
 	return nil
 }
