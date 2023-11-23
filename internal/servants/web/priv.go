@@ -5,6 +5,8 @@
 package web
 
 import (
+	"fmt"
+	"github.com/cute-angelia/go-utils/syntax/itime"
 	"image"
 	"log"
 	"strings"
@@ -118,8 +120,10 @@ func (s *privSrv) UploadAttachment(req *web.UploadAttachmentReq) (*web.UploadAtt
 	defer req.File.Close()
 
 	// 生成随机路径
+	downtime := itime.NewUnixNow()
+	yearMonth := fmt.Sprintf("%s/%s", downtime.FormatForTpl("2006"), downtime.FormatForTpl("01"))
 	//randomPath := uuid.Must(uuid.NewV4()).String()
-	ossSavePath := req.UploadType + "/" + time.Now().Format("2006") + "/" + ifile.NewFileName("").SetExt(req.FileExt).GetNameTimelineReverse(true)
+	ossSavePath := req.UploadType + "/" + yearMonth + "/" + ifile.NewFileName("").SetExt(req.FileExt).GetNameTimelineReverse(true)
 	objectUrl, err := s.oss.PutObject(ossSavePath, req.File, req.FileSize, req.ContentType, false)
 	if err != nil {
 		logrus.Errorf("oss.putObject err: %s", err)
