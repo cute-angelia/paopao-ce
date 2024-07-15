@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pyroscope-io/client/pyroscope"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gorm.io/gorm/logger"
@@ -387,15 +386,15 @@ func (s *meiliConf) Endpoint() string {
 	return endpoint(s.Host, s.Secure)
 }
 
-func (s *pyroscopeConf) GetLogger() (logger pyroscope.Logger) {
-	switch strings.ToLower(s.Logger) {
-	case "standard":
-		logger = pyroscope.StandardLogger
-	case "logrus":
-		logger = logrus.StandardLogger()
-	}
-	return
-}
+//func (s *pyroscopeConf) GetLogger() (logger pyroscope.Logger) {
+//	switch strings.ToLower(s.Logger) {
+//	case "standard":
+//		logger = pyroscope.StandardLogger
+//	case "logrus":
+//		logger = logrus.StandardLogger()
+//	}
+//	return
+//}
 
 func endpoint(host string, secure bool) string {
 	schema := "http"

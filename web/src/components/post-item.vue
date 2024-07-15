@@ -90,8 +90,8 @@
 
       </template>
       <template #description v-if="post.texts.length > 0">
-        <span v-for="content in post.texts" :key="content.id" class="post-text" @click.stop="doClickText($event, post.id)"
-          v-html="parsePostTag(content.content).content"></span>
+        <span v-for="content in post.texts" :key="content.id" class="post-text"
+          @click.stop="doClickText($event, post.id)" v-html="parsePostTag(content.content).content"></span>
       </template>
 
       <template #footer>
@@ -101,6 +101,7 @@
         <post-image v-if="post.imgs.length > 0" :imgs="post.imgs" />
         <post-video v-if="post.videos.length > 0" :videos="post.videos" />
         <post-link v-if="post.links.length > 0" :links="post.links" />
+        <post-bucket v-if="post.imgs.length > 0 || post.videos.length > 0" :items="post.imgs.concat(post.videos)" />
       </template>
       <template #action>
         <n-space justify="space-between">
