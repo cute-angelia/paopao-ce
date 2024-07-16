@@ -201,6 +201,10 @@ func (s *tweetManageSrv) UpdatePostContent(content *ms.PostContent) (*ms.PostCon
 	return content.Update(s.db)
 }
 
+func (s *tweetManageSrv) UpdatePostBucket(content *ms.PostBucket) (*ms.PostBucket, error) {
+	return content.CreateOrEdit(s.db)
+}
+
 func (s *tweetManageSrv) CreateAttachment(obj *ms.Attachment) (int64, error) {
 	attachment, err := obj.Create(s.db)
 	return attachment.ID, err

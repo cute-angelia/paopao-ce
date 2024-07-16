@@ -223,6 +223,12 @@ declare module NetParams {
     content: string;
   }
 
+  interface PostEditBucket {
+    post_id: number;
+    bucket: string;
+    object_dir: string;
+  }
+
   interface PostDeletePost {
     id: number;
   }

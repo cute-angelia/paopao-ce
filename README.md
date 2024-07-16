@@ -24,3 +24,11 @@ web icon https://ionic.io/ionicons
 1. 业务处理 /internal/servants/web/priv.go
 2. 编辑 mirc/web/v1/priv.go
 3. 自动生成 gen-mir
+
+
+### 发布
+
+1. cd web
+2. check .env VITE_HOST
+3. npm run build
+4. cd .. && go build

@@ -121,6 +121,17 @@ export const deletePost = (
   });
 };
 
+/** 编辑bucket */
+export const editPostBucket = (
+  data: NetParams.PostEditBucket
+): Promise<NetReq.PostDeletePost> => {
+  return request({
+    method: "post",
+    url: "/v1/post/updateContentBucket",
+    data,
+  });
+};
+
 /** 编辑动态文本 */
 export const editPostText = (
   data: NetParams.PostEditTextPost

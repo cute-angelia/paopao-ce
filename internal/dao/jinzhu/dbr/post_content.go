@@ -41,6 +41,29 @@ type PostContent struct {
 	Sort    int64        `json:"sort"`
 }
 
+type PostBucket struct {
+	PostID    int64  `json:"post_id"`
+	Bucket    string `json:"bucket"`
+	ObjectDir string `json:"object_dir"`
+}
+
+func (p *PostBucket) CreateOrEdit(db *gorm.DB) (*PostBucket, error) {
+	exist := PostBucket{}
+	db.Model(&PostBucket{}).Where("post_id = ?", p.PostID).First(&exist)
+	if exist.PostID > 0 {
+		err := db.Debug().Model(&PostBucket{}).Where("post_id = ?", p.PostID).Updates(&p).Error
+		return p, err
+	} else {
+		err := db.Debug().Create(&p).Error
+		return p, err
+	}
+}
+
+func (p *PostBucket) Update(db *gorm.DB) (*PostBucket, error) {
+	err := db.Debug().Model(&PostBucket{}).Where("post_id = ?", p.PostID).Updates(&p).Error
+	return p, err
+}
+
 type PostContentFormated struct {
 	ID      int64        `db:"id" json:"id"`
 	PostID  int64        `json:"post_id"`

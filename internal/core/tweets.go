@@ -43,6 +43,7 @@ type TweetManageService interface {
 	DeletePostCollection(p *ms.PostCollection) error
 	CreatePostContent(content *ms.PostContent) (*ms.PostContent, error)
 	UpdatePostContent(content *ms.PostContent) (*ms.PostContent, error)
+	UpdatePostBucket(content *ms.PostBucket) (*ms.PostBucket, error)
 	CreateAttachment(obj *ms.Attachment) (int64, error)
 }
 

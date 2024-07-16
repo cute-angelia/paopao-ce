@@ -1,9 +1,10 @@
 <template>
   <div class="link-wrap">
-    <div class="link-item" v-if="bucketInfo.bucket.length > 0">
+    <div class="link-item" v-if="postContentText.bucket.length > 0">
       <n-icon class="hash-link"><archive-outline /></n-icon>
       <div class="link-txt-wrap">
-        <span @click="openEditModel()" class="link-txt">{{ bucketInfo.bucket + "/" + bucketInfo.dir}}</span>
+        <span @click="openEditModel()" class="link-txt">{{ postContentText.bucket + "/" +
+          postContentText.object_dir}}</span>
       </div>
     </div>
 
@@ -13,26 +14,25 @@
       <template #header-extra>
       </template>
 
-
       <n-input-group style="margin-bottom: 2px;">
         <n-button :style="{ width: '12%'}" disabled>
           bucket
         </n-button>
-        <n-input type="text" v-model:value="postContentText.bucket" />
+        <n-select v-model:value="postContentText.bucket" filterable placeholder="选一个bucket" :options="options" />
       </n-input-group>
 
       <n-input-group style="margin-bottom: 2px;">
         <n-button :style="{ width: '12%' }" disabled>
           dir
         </n-button>
-        <n-input type="text" v-model:value="postContentText.dir" />
+        <n-input type="text" v-model:value="postContentText.object_dir" />
       </n-input-group>
 
       <n-input-group style="margin-bottom: 2px;">
         <n-button :style="{ width: '12%' }" disabled>
           post_id
         </n-button>
-        <n-input disabled type="text" v-model:value="postContentText.post_id" />
+        <n-input-number disabled type="text" v-model:value="postContentText.post_id" />
       </n-input-group>
 
 
@@ -50,18 +50,27 @@
 <script setup lang="ts">
 import { h, ref, onMounted, computed } from 'vue';
 import { ArchiveOutline } from '@vicons/ionicons5';
+
+
+import {
+  editPostBucket
+} from '@/api/post';
+
+
 const props = withDefaults(defineProps<{
     items: Item.PostItemProps[]
 }>(), {
   items: () => []
 });
 
-var bucketInfo = {
+
+// cyw 内容编辑
+const postContentText = ref({
   "post_id": 0,
   "bucket": "",
-  "dir": "",
-  "key": "",
-}
+  "object_dir": "",
+  // "key": "",
+})
 
 for (let i = 0; i < props.items.length; i++) {
   const element = props.items[i];
@@ -69,46 +78,68 @@ for (let i = 0; i < props.items.length; i++) {
     var a = new URL(element.content)
     var temps = a.pathname.split("/")
 
-    bucketInfo.post_id = element.post_id
-    bucketInfo.key = temps[temps.length-1]
+    postContentText.value.post_id = element.post_id
+    // bucketInfo.key = temps[temps.length-1]
 
     temps = temps.slice(1);
     temps = temps.slice(0, -1);
-    bucketInfo.bucket = temps[0]
+    postContentText.value.bucket = temps[0]
     temps = temps.slice(1);
-    bucketInfo.dir = temps.join("/")
+    postContentText.value.object_dir = temps.join("/")
+
+    console.log(postContentText.value)
     break;
   }
-}
-console.log(bucketInfo)
 
+}
 
 // 编辑
 const showEditModal = ref(false);
 
-// cyw 内容编辑
-const postContentText = ref({
-  "post_id": 0,
-  "bucket": "",
-  "dir": "",
-  "key": "",
-})
-
 const execEditAction = () => {
-  window.$message.success('修改成功');
-  // editPostText(postContentText.value)
-  //   .then((_res) => {
-  //     showEditModal.value = false;
-  //   })
-  //   .catch((_err) => {
-  //     loading.value = false;
-  //   });
+  editPostBucket(postContentText.value)
+    .then((_res) => {
+      window.$message.success('修改成功');
+      showEditModal.value = false;
+
+
+      postContentText.value.post_id = _res.post_id
+      postContentText.value.bucket = _res.bucket
+      postContentText.value.object_dir = _res.object_dir
+    })
+    .catch((_err) => {
+      loading.value = false;
+    });
 };
 
 const openEditModel = () =>{
   showEditModal.value = true;
-  postContentText.value = bucketInfo
 }
+
+// buckets
+const  options= [
+      {
+        label: 'social-station',
+        value: 'social-station'
+      },
+      {
+        label: 'photo-station',
+        value: 'photo-station'
+      },
+      {
+        label: 'topic-station',
+        value: 'topic-station'
+      },
+      {
+        label: 'paopao-station',
+        value: 'paopao-station'
+      },
+      {
+        label: 'video-station',
+        value: 'video-station'
+      },
+]
+
 
 </script>
 

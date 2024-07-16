@@ -77,6 +77,18 @@ type LockTweetReq struct {
 	ID       int64 `json:"id" binding:"required"`
 }
 
+type UpdateTweetBucketReq struct {
+	PostID    int64  `json:"post_id" binding:"required"`
+	Bucket    string `json:"bucket" binding:"required"`
+	ObjectDir string `json:"object_dir" binding:"required"`
+}
+
+type UpdateTweetBucketResq struct {
+	PostID    int64  `json:"post_id"`
+	Bucket    string `json:"bucket"`
+	ObjectDir string `json:"object_dir"`
+}
+
 type UpdateTweetContentReq struct {
 	BaseInfo `json:"-" binding:"-"`
 	ID       int64           `json:"id" binding:"required"`

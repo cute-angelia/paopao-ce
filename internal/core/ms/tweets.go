@@ -36,6 +36,7 @@ type (
 	PostCollection     = dbr.PostCollection
 	PostAttachmentBill = dbr.PostAttachmentBill
 	PostContent        = dbr.PostContent
+	PostBucket         = dbr.PostBucket
 	Attachment         = dbr.Attachment
 	AttachmentType     = dbr.AttachmentType
 	PostContentT       = dbr.PostContentT

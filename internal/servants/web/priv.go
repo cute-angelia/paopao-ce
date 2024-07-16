@@ -705,6 +705,30 @@ func (s *privSrv) UpdateTweetContent(req *web.UpdateTweetContentReq) (*web.Updat
 	}
 }
 
+func (s *privSrv) UpdateTweetContentBucket(req *web.UpdateTweetBucketReq) (*web.UpdateTweetBucketResq, mir.Error) {
+	_, err := s.Ds.GetPostByID(req.PostID)
+	if err != nil {
+		return nil, web.ErrGetPostsFailed
+	}
+
+	bucket := ms.PostBucket{
+		PostID:    req.PostID,
+		Bucket:    req.Bucket,
+		ObjectDir: req.ObjectDir,
+	}
+
+	if resp, err := s.Ds.UpdatePostBucket(&bucket); err != nil {
+		log.Println(err)
+		return nil, web.ErrUpdatePostContentFailed
+	} else {
+		return &web.UpdateTweetBucketResq{
+			PostID:    resp.PostID,
+			Bucket:    resp.Bucket,
+			ObjectDir: resp.ObjectDir,
+		}, nil
+	}
+}
+
 func (s *privSrv) deletePostCommentReply(reply *ms.CommentReply) error {
 	err := s.Ds.DeleteCommentReply(reply)
 	if err != nil {
