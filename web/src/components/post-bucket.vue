@@ -74,20 +74,22 @@ const postContentText = ref({
 
 for (let i = 0; i < props.items.length; i++) {
   const element = props.items[i];
+
   if (element.content.indexOf("http") >= 0) {
     var a = new URL(element.content)
     var temps = a.pathname.split("/")
+
 
     postContentText.value.post_id = element.post_id
     // bucketInfo.key = temps[temps.length-1]
 
     temps = temps.slice(1);
     temps = temps.slice(0, -1);
-    postContentText.value.bucket = temps[0]
+    postContentText.value.bucket = decodeURI(temps[0])
     temps = temps.slice(1);
-    postContentText.value.object_dir = temps.join("/")
+    postContentText.value.object_dir = decodeURI(temps.join("/"))
 
-    console.log(postContentText.value)
+    // console.log(postContentText.value)
     break;
   }
 
