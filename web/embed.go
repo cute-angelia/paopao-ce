@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 //go:build !(slim && embed)
-// +build !slim !embed
 
 package web
 

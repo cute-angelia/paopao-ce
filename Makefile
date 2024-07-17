@@ -35,6 +35,14 @@ ENV_KEY := VITE_HOST
 ENV_VALUE := $(shell sed -n 's/^$(ENV_KEY)=//p' $(ENV_FILE))
 # ENV_VALUE :=
 
+
+up:
+	git add .
+	git commit -am "update [CI SKIP]"
+	git pull origin vanilla
+	git push origin vanilla
+	@echo "\n 代码提交发布..."
+
 infoenv:
 	@echo $(ENV_VALUE)
 

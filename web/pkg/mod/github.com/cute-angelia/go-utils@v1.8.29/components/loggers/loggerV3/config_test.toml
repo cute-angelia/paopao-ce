@@ -1,0 +1,5 @@
+[logger.test]
+project = "test_project"
+isOnline = true
+fileJson = true
+level = 0
